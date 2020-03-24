@@ -13,14 +13,17 @@ library(downloader)
 download(zipfileURL,destfile="PowerConsumptionData.zip", mode="wb")
 unzip("PowerConsumptionData.zip", exdir = ".")
 
-# Reading in the relevant data
+# Read in the relevant data from the dates 1/2/2007 and 2/2/2007
 install.packages("sqldf")
 library(sqldf)
-dataframe <- read.csv.sql("household_power_consumption.txt", "select * from file where Date = '1/2/2007' or Date = '2/2/2007' ", sep=";")
+dataframe1 <- read.csv.sql("household_power_consumption.txt", "select * from file where Date = '1/2/2007' or Date = '2/2/2007' ", sep=";")
 
-# Does not work datatest <- read.table("household_power_consumption.txt",skip=grep("1/2/2007", readLines("household_power_consumption.txt")),sep=";", na.strings = "?")
 
-# Convert Date into date format
-dataframe2 <- dataframe # copy
-dataframe2$Date <- as.Date(dataframe2$Date, format = "%d/%m/%Y")
-# times "%H:%M:%S" NOG DOEN
+# Open a .png connection in which the plot will be saved
+png("plot1.png", width = 480, height = 480)
+
+# Make the plot
+hist(dataframe1$Global_active_power,main="Global Active Power", col="red",xlab="Global Active Power (kilowatts)",ylab="Frequency")
+
+# Close the connection
+dev.off()
